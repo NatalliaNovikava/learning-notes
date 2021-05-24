@@ -78,7 +78,7 @@ So for Twitter the distribution of followers per user is the key load parameters
 
 3 Hybrid approach. Small numbers of users with large number of followers are excepted from fan-out. Tweets from celebrities are fetched separately and merged with the home timeline when user requests.
 
-###Describing Performance
+### Describing Performance
 To check how system deal with increased load:
    - increase a load parameter and keep the system's resources unchanged, how the performance is affected?
    - increase a load parameter, how much do you need to increase the resources to keep performance unchanged?
@@ -105,7 +105,7 @@ So it is important to measure response time on customer side.
 
 To monitor percentile you need rolling window of response times of request in the last 10 min.
 
-###Approaches for Coping with Load
+### Approaches for Coping with Load
 **_Scaling up_** - vertical scaling, moving to a more powerful machine.\
 **_Scaling out_** - horizontal scaling, distributing the load across multiple smaller machine (Shared-nothing architecture)
 Elastic system can automatically add computing resources when they detect a load increase.
@@ -114,13 +114,13 @@ They are useful if the load is unpredictable.
 An architecture that scales well for a particular application is built arround assumptions of which
 operations will be common and which will be rare.
 
-###Maintainability
+### Maintainability
 - Operability - make it easy for  operation team to keep the system running smoothly
 - Simplicity - make it easy for new engineers to understand the system
 - Evolvability - also known as extensibility, modifiability,plasticity
 
-##Data Model And Query Languages
-####Relational Model Versus Document Model
+## Data Model And Query Languages
+#### Relational Model Versus Document Model
 Relational data model is most well-known now was proposed in 1970 by Edgard Codd.
 Data is organized in relations(called tables in SQL), where each relation is unordered collection of tuples(rows).
 By the mid-1980s RDBMSes and SQL had become the tools of choice for most people.
@@ -135,29 +135,29 @@ Alternatives:
  - object databases
  - XML databases
 
-####The Birth Of NoSQL
+#### The Birth Of NoSQL
 
 It was catchy hashtag that retroactively reinterpreted as Not Only SQL.
 
-####The Object Relational Mismatch
+#### The Object Relational Mismatch
 **_Object-relational mapping (ORM)_** frameworks ActiveRecord and Hibernate reduce the amount of boilerplate code, but they can't completely hide the difference between the two models.
 
 Databases that support JSON format:
 - MongoDB, RethinkDB, CouchDB,Espresso\
 The **one-to-many** relationships imply a tree structure and JSON makes this tree structure explicit.
   
-####Many-to-One and Many-To-Many Relationships.
+#### Many-to-One and Many-To-Many Relationships.
 
 **_Normalization_** in db is removing duplication.\
 As a rule of thumb if you're duplicating values that could be stored in just  one place, the schema is not normalized.
 
-Normalizing **many-to-one** relationships doesn't fit nicely into document model.
+Normalizing **many-to-one** relationships doesn't fit nicely into document model.\
 In relational db it's normal to refer to rows in other tables by id. In document db joins are not needed for one-to-many tree structures and support for joins is often weak.
 
-####Are Document Databases Repeating The History?
-Many-to-many relationships  and joins routinely used in relational db, document db and NoSQL reopened a debate.
+#### Are Document Databases Repeating The History?
+**Many-to-many** relationships  and joins routinely used in relational db, document db and NoSQL reopened a debate.
 
-Information Management System IMS - the most popular db in 1970. It uses hierarchical model that has remarkable similarities with the JSON.
+_Information Management System_ IMS - the most popular db in 1970. It uses hierarchical model that has remarkable similarities with the JSON.
 IMS worked well with one-to-many relationships, but it made many-to-many relationships difficult and doesn't support joins.
 Developers had to decide to denormalize data or perform join in application code.
 
