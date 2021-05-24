@@ -43,6 +43,143 @@ There is a move toward systems that can tolerate the loss of entire machines, by
    - set up monitorings such as performance metrics and error rates
 
 ### Scalability
+Scalability is the term we use to describe a system's ability to cope with increased load.
+* **Describing load**
+Load parameters depend on the architecture of your system:
+  - request per sec to a web server
+  - the ratio of reads to writes in a database
+  - the number of simultaneously active users in a chat room
+  - the hit rate on a cache
+  - average case or bottleneck 
+  
+Twitter example:
+Post tweet: A user can publish a new message to its followers (4.6k req/sec on average, 12k at peak)
+Home timeline: A user can view tweets of the people they follow (300k req/sec)
+
+Twitter's scaling challenge is not primarily due to tweet volume, but due to fan-out.\
+Each user follows many people.\
+And each user is followed by many people.
+
+**Three ways**:\
+1 posting a tweet simply inserts the new tweet into a collection of tweets.When user requests home timeline look up all the people they follow,
+find all their tweets and merge them (sorted by time).
+
+    SELECT tweets.*, users.*
+    FROM tweets
+    JOIN users ON tweets.sender_id = users_id
+    JOIN follows ON follows.followee_id = users_id
+    WHERE follows.follower_id = current_user
+
+2 Maintain a cache for each user's home timeline. When a user posts a tweet, look up all the people the user follows\
+and insert tweet into each of their cache.
+Downside of this approach that posting requires now a lot of extra work. Each tweet on average is delivered to 75 followers so
+4.6k write per second become 345k. Some users have over 30 mil followers.
+So for Twitter the distribution of followers per user is the key load parameters for discussing scalability since it determines the fan-out load.
+
+3 Hybrid approach. Small numbers of users with large number of followers are excepted from fan-out. Tweets from celebrities are fetched separately and merged with the home timeline when user requests.
+
+###Describing Performance
+To check how system deal with increased load:
+   - increase a load parameter and keep the system's resources unchanged, how the performance is affected?
+   - increase a load parameter, how much do you need to increase the resources to keep performance unchanged?
+
+**_In batch processing (Hadoop)_** we look at the throughput - the number of records we can process per seconds
+Or total time it takes to run a job on the dataset.\
+**_In online systems_** service's response time - the time between client sending request and receiving response.
+
+**Response time** includes: actual time to process a request, network delays and queueing delays.\
+Latency is the time request is waiting to be handled  - during which it is latent, awaiting service.
+
+Average response time (arithmetic mean) is not very good metric.
+
+_**Percentile.**_\
+If you take a list of response times and sort from fastest to slowest, then the median means that half of the users is served with less than median response time.
+The median is 5oth percentile - p50.
+
+Common higher percentiles p95, p99, p99.9 are called tail latency.
+p99.9 affects only 1 in 1000 requests.\
+Percentiles are used in service level objectives SLOs and service level agreements SLAs.
+
+Queueing delays often account for a large part of the response time at high percentile.
+So it is important to measure response time on customer side.
+
+To monitor percentile you need rolling window of response times of request in the last 10 min.
+
+###Approaches for Coping with Load
+**_Scaling up_** - vertical scaling, moving to a more powerful machine.\
+**_Scaling out_** - horizontal scaling, distributing the load across multiple smaller machine (Shared-nothing architecture)
+Elastic system can automatically add computing resources when they detect a load increase.
+They are useful if the load is unpredictable.
+
+An architecture that scales well for a particular application is built arround assumptions of which
+operations will be common and which will be rare.
+
+###Maintainability
+- Operability - make it easy for  operation team to keep the system running smoothly
+- Simplicity - make it easy for new engineers to understand the system
+- Evolvability - also known as extensibility, modifiability,plasticity
+
+##Data Model And Query Languages
+####Relational Model Versus Document Model
+Relational data model is most well-known now was proposed in 1970 by Edgard Codd.
+Data is organized in relations(called tables in SQL), where each relation is unordered collection of tuples(rows).
+By the mid-1980s RDBMSes and SQL had become the tools of choice for most people.
+
+The roots lie in business data processing:
+ - transaction processing (banking transactions, airline reservation etc)
+ - batch processing(customer invoicing, payroll, reporting)
+
+Alternatives:
+ - network model
+ - hierarchical model
+ - object databases
+ - XML databases
+
+####The Birth Of NoSQL
+
+It was catchy hashtag that retroactively reinterpreted as Not Only SQL.
+
+####The Object Relational Mismatch
+**_Object-relational mapping (ORM)_** frameworks ActiveRecord and Hibernate reduce the amount of boilerplate code, but they can't completely hide the difference between the two models.
+
+Databases that support JSON format:
+- MongoDB, RethinkDB, CouchDB,Espresso\
+The **one-to-many** relationships imply a tree structure and JSON makes this tree structure explicit.
+  
+####Many-to-One and Many-To-Many Relationships.
+
+**_Normalization_** in db is removing duplication.\
+As a rule of thumb if you're duplicating values that could be stored in just  one place, the schema is not normalized.
+
+Normalizing **many-to-one** relationships doesn't fit nicely into document model.
+In relational db it's normal to refer to rows in other tables by id. In document db joins are not needed for one-to-many tree structures and support for joins is often weak.
+
+####Are Document Databases Repeating The History?
+Many-to-many relationships  and joins routinely used in relational db, document db and NoSQL reopened a debate.
+
+Information Management System IMS - the most popular db in 1970. It uses hierarchical model that has remarkable similarities with the JSON.
+IMS worked well with one-to-many relationships, but it made many-to-many relationships difficult and doesn't support joins.
+Developers had to decide to denormalize data or perform join in application code.
+
+The proposed solutions were:
+  - relational model(became SQL)
+  - network model
+
+**_The Network Model_**
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
 
 
  
