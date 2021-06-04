@@ -2,8 +2,8 @@
 ## Reliable, Scalable and Maintainable applications
 - [Reliable, scalable, and maintainable applications][#Reliable, scalable and maintainable applications]
   - [Reliability][#Reliability]
-  - [Scalability][#Scalability]
-  - [Maintainability][#Maintainability]
+  - [Scalability](#Scalability)
+  - [Maintainability]()
  
   
    
@@ -313,3 +313,5 @@ Two functions:
 [#reliability]: #reliability
 
 [#Reliablity]: #reliability
+
+[#Scalability]: #Scalability
