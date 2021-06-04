@@ -1,14 +1,13 @@
 # Foundations of Data Systems
-## Reliable, Scalable and Maintainable applications
-- [Reliable, scalable, and maintainable applications][#Reliable, scalable and maintainable applications]
-  - [Reliability][#Reliability]
+
+- [Reliable, Scalable, and Maintainable Applications](#Reliable,-Scalable,-and-Maintainable-Applications)
+  - [Reliability](#Reliability)
   - [Scalability](#Scalability)
-  - [Maintainability]()
- 
-  
-   
- 
-### Reliable, scalable and maintainable applications
+  - [Maintainability](#Maintainability)
+- [Data Model And Query Languages](#Data-Model-And-Query-Languages)
+  -[Relational Model Versus Document Model]()
+
+## Reliable, Scalable, and Maintainable Applications
 A data-intensive application are typically built up from blocks.
 - store date (database)
 - remember the result of expensive computation (caches)
@@ -17,7 +16,7 @@ A data-intensive application are typically built up from blocks.
 - periodically crunch a large amount of data (batch processing)
 - Reliability. To work correctly even in the face of adversity
 - Scalability. Reasonable ways to deal with growth
-- Maintability. People should be able to work on the system productively.
+- Maintainability. People should be able to work on the system productively.
 
 ### Reliability
 Typical expectations:
@@ -86,7 +85,7 @@ So for Twitter the distribution of followers per user is the key load parameters
 
 3 Hybrid approach. Small numbers of users with large number of followers are excepted from fan-out. Tweets from celebrities are fetched separately and merged with the home timeline when user requests.
 
-### Describing Performance
+#### Describing Performance
 To check how system deal with increased load:
    - increase a load parameter and keep the system's resources unchanged, how the performance is affected?
    - increase a load parameter, how much do you need to increase the resources to keep performance unchanged?
@@ -113,7 +112,7 @@ So it is important to measure response time on customer side.
 
 To monitor percentile you need rolling window of response times of request in the last 10 min.
 
-### Approaches for Coping with Load
+#### Approaches for Coping with Load
 **_Scaling up_** - vertical scaling, moving to a more powerful machine.\
 **_Scaling out_** - horizontal scaling, distributing the load across multiple smaller machine (Shared-nothing architecture)
 Elastic system can automatically add computing resources when they detect a load increase.
@@ -310,8 +309,3 @@ Two functions:
 
 
 
-[#reliability]: #reliability
-
-[#Reliablity]: #reliability
-
-[#Scalability]: #Scalability
