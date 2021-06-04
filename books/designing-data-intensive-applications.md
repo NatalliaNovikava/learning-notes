@@ -1,5 +1,8 @@
 # Foundations of Data Systems
 ## Reliable, Scalable and Maintainable applications
+- [Reliable, scalable, and maintainable applications](#reliable-scalable-and-maintainable-applications)
+  - [Reliability][#Reliablity]
+ 
 
 A data-intensive application are typically built up from blocks.
 - store date (database)
@@ -140,7 +143,7 @@ Alternatives:
 It was catchy hashtag that retroactively reinterpreted as Not Only SQL.
 
 #### The Object Relational Mismatch
-**_Object-relational mapping (ORM)_** frameworks ActiveRecord and Hibernate reduce the amount of boilerplate code, but they can't completely hide the difference between the two models.
+**_Object-relational mapping (ORM)_** frameworks ActiveRecord and Hibernate reduce the amount of boilerplate code, but they can't completely hide the difference between the two models: objects in the application code and the database model of tables, rows and columns.
 
 Databases that support JSON format:
 - MongoDB, RethinkDB, CouchDB,Espresso\
@@ -157,7 +160,7 @@ In relational db it's normal to refer to rows in other tables by id. In document
 #### Are Document Databases Repeating The History?
 **Many-to-many** relationships  and joins routinely used in relational db, document db and NoSQL reopened a debate.
 
-_Information Management System_ IMS - the most popular db in 1970. It uses hierarchical model that has remarkable similarities with the JSON.
+**_Information Management System_** IMS - the most popular db in 1970. It uses hierarchical model that has remarkable similarities with the JSON.
 IMS worked well with one-to-many relationships, but it made many-to-many relationships difficult and doesn't support joins.
 Developers had to decide to denormalize data or perform join in application code.
 
@@ -167,6 +170,124 @@ The proposed solutions were:
 
 **_The Network Model_**
 
+CODASYL model (Conference on Data System Languagues) - network model
+
+_**Hierarchical model:**_
+   - every record has exactly one parent
+
+_**Network model:**_
+   - record could have multiple parents
+   - links between records like a pointers in programming languages
+   - to access the record you need to follow the path from a root record(access path)
+   - the code for querying and updating the db is very complicated
+
+**_The relational model_**
+- relations(tables) are collections of tuples(rows)
+- query optimizer decides which part of the query to execute in which order and which indexes to use
+
+**_Comparison to document database_**
+
+**one-to-many**
+- Document db reverted back to hierarchical model in storing nested records within their parent record.
+
+**many-to-one and many-to-many**
+- Document db like relational db: the related item is referenced by unique id which is called
+- foreign key in relational db
+- document reference in document db
+
+Relational vs Document databases today
+
+The differences in the data model:
+
+Document data model:
+- schema flexibility
+- better performance due to locality
+
+Relational Model:
+- better support for joins
+- many-to-one and many-to-many relationships
+
+For highly interconnected data:
+- document model is akward
+- relational is acceptable
+- graph is the most natural
+
+**Schema flexibility in the document model**
+ - **_schema-on-read_** (document db)\
+   the structure of the document is implicit and only interpreted when the data is read.
+   It is advantageous if all items in the collection have the same structure for some reason.
+ - **_schema-on-write_** (relational db)\ 
+   the schema is explicit and the database ensures all written data conforms to it.\
+   
+Change of format of the data:
+- in document db you just start writing a new format and handle in app code the documents with old format
+- in relational you perform a migration.
+
+ALTER TABLE users ADD COLUMN first_name text;
+UPDATE users SET first_name = substring_index(name,' ', 1); -- MySQL
+- Most relational db performs ALTER TABLE in several milliseconds.(except MySQL)
+- UPDATE is likely to be slow on large table. If acceptable first_name maybe set to default NULL and fill it in at read time.
+
+**Data locality for queries**
+Documents are stored as a single continuous String, encoded as JSON, XML or binary variant thereof BSON.
+The **_locality advantage_** 
+ - db typically needs to load the entire document
+ - locality advantage is applied if you need large parts of document  at the same time.
+ - if you need small portion of it, it can be wasteful
+
+**On updates to a document:**
+ - the entire document needs to be rewritten
+ - only modifications that don't increase the size of encoded document can easily be performed in place
+ - recommended to keep documents fairly small
+
+Locality in relational db:
+ - Google's Spanner - allows to declare that's a table's rows should be interleaved within the parent table
+
+Convergence of document and relational databases:
+XML documents: Most relational db (other than MySQL) have support for it.
+JSON support: PostgreSQL, MySQL, IBM DB2
+Relational-like joins in its query language: RethinkDB 
+Atomatic resolving db references (client-side join): MongoDB
+
+Query Languages For Data
+Imperative - tells computer to perform certain operation in certain order
+Declarative - SQL - you just specify the pattern of data you want but not how to achieve that goal.
+It is up to the db's query optimizer to decide which indexes and joins to use and in which order to execute various part of query.
+
+Declarative Queries On Web
+In web browser, using declarative CSS styling is much better than manipulating styles imperatively in JS.
+
+MapReduce Querying
+MapReduce is a programming model for processing large amount of data in bulk across many machines, popularized by Google.
+A limited form of MapReduce is supported by MongoDB and CouchDB, as a mechanism for performing read-only queries across many documents.
+
+MapReduce is neither a declarative query language nor fully imperative query API, but in between: the logic of query is expressed with snippet of code which are called repeatedly by the framework.
+Two functions:
+- map(collect) 
+- reduce (fold or inject) 
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+
 
 
 
@@ -182,4 +303,8 @@ The proposed solutions were:
 
 
 
- 
+
+
+[#reliability]: #reliability
+
+[#Reliablity]: #reliability
