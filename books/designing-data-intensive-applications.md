@@ -1,9 +1,14 @@
 # Foundations of Data Systems
 ## Reliable, Scalable and Maintainable applications
-- [Reliable, scalable, and maintainable applications](#reliable-scalable-and-maintainable-applications)
-  - [Reliability][#Reliablity]
+- [Reliable, scalable, and maintainable applications][#Reliable, scalable and maintainable applications]
+  - [Reliability][#Reliability]
+  - [Scalability][#Scalability]
+  - [Maintainability][#Maintainability]
  
-
+  
+   
+ 
+### Reliable, scalable and maintainable applications
 A data-intensive application are typically built up from blocks.
 - store date (database)
 - remember the result of expensive computation (caches)
