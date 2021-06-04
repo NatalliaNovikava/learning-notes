@@ -5,7 +5,7 @@
   - [Scalability](#Scalability)
   - [Maintainability](#Maintainability)
 - [Data Model And Query Languages](#Data-Model-And-Query-Languages)
-  -[Relational Model Versus Document Model]()
+  -[Relational Model Versus Document Model](#Relational Model Versus Document Model)
 
 ## Reliable, Scalable, and Maintainable Applications
 A data-intensive application are typically built up from blocks.
